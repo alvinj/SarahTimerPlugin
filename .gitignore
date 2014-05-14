@@ -1,0 +1,10 @@
+/bin
+/project
+/target
+.DS_Store
+.cache
+.classpath
+.project
+.settings
+deploy/com/
+project/boot/

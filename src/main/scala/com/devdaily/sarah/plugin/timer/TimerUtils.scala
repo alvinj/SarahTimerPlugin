@@ -5,22 +5,32 @@ import java.util.regex.Pattern
 
 object TimerUtils {
   
-    val patternWeHandle = ".*set timer (to|for) (.*) (seconds*|minutes*).*"
-    val p = Pattern.compile(patternWeHandle)
-      
+    // set timer for one second
+    // set a timer for one second
+    // set a timer for nine seconds
+    // set a timer for nine minutes
+    // set timer for 10 seconds
+    // set timer for 10 minutes
+    // set timer for 10 hours
+    val patternWeHandle = ".*(set|create) a* *timer (to|for) (.*) (seconds*|minutes*|hours*).*"
+    val compiledPattern = Pattern.compile(patternWeHandle)
+    
+    // the plugin should call this method
     def phraseMatchesOurPattern(spokenPhrase: String) = spokenPhrase.trim.toLowerCase.matches(patternWeHandle)
     
+    // the plugin should call this method
     // get (a) the numerical time and (b) seconds/minutes/hours from the spoken phrase,
     // and create a scala.concurrent.duration.Duration from it
-    def getDurationFromSpokenPhrase(spokenPhrase: String): Option[Duration] = {
-        val m = p.matcher(spokenPhrase)
+    def getDurationFromSpokenPhrase(spokenPhrase: String): Option[FiniteDuration] = {
+        val m = compiledPattern.matcher(spokenPhrase)
         if (m.find) {
-            val intValue = convertNumericStringToInt(m.group(2).trim)
-            val secondMinuteHourField = m.group(3).trim
-            intValue match {
-                case Some(i) => Some(Duration(i, durationMap.getOrElse(secondMinuteHourField, SECONDS)))
-                case None => None
-            }
+            val intOption = convertNumericStringToInt(m.group(3).trim)
+            val timeUnitString = m.group(4).trim
+            val timeUnitOption = durationMap.get(timeUnitString)
+            for {
+                i <- intOption
+                tu <- timeUnitOption
+            } yield FiniteDuration(i, tu)  // yields as an option
         } else {
             None
         }

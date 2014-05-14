@@ -19,11 +19,19 @@ class TimerPlugin extends SarahPlugin {
     implicit val actorSystem = ActorSystem("CurrentTimeActorSystem")
       
     // tell sarah whether we can handle the given phrase (true) or not (false)
-    def handlePhrase(phrase: String): Boolean = {
-        if (TimerUtils.phraseMatchesOurPattern(phrase)) {
-            brain ! PleaseSay("Okay, the timer has been set.")
-            actorSystem.scheduler.scheduleOnce(10 seconds, brain, PleaseSay("This is a timer reminder."))
-            true
+    def handlePhrase(spokenPhrase: String): Boolean = {
+        if (TimerUtils.phraseMatchesOurPattern(spokenPhrase)) {
+            val durationOption = TimerUtils.getDurationFromSpokenPhrase(spokenPhrase)
+            durationOption match {
+                case Some(duration) => 
+                    brain ! PleaseSay("The timer has been set.")
+                    actorSystem.scheduler.scheduleOnce(duration, brain, PleaseSay("Alert - This is a timer reminder."))
+                    true
+                case None =>
+                    // it matched our pattern, but we couldn't extract the intValue and timeUnit for some reason
+                    brain ! PleaseSay("Sorry, the Timer couldn't understand that.")
+                    true
+            }
         } else {
             false
         }

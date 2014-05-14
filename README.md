@@ -1,33 +1,34 @@
+Sarah 'Timer' Plugin
+====================
 
-Sarah 'Google Search' Plugin
-============================
+This is a new "Timer" plugin for Sarah (v2).
+It can handle phrases like these:
 
-This is a new "Google Search" plugin for Sarah (v2). 
-Just say "Google Albert Einstein", and it will open that search query in your default browser.
+    val oneSecond = "set timer for one second"
+    val twoSeconds = "set timer to two seconds"
+    val tenSeconds = "set timer to 10 seconds"
+    val fiveMinutesA = "set timer to five minutes"
+    val fiveMinutesB = "set timer to five minutes please"
+    val tenMinutes = "set a timer to 10 minutes please"
+    val oneHour = "set timer to one hour"
+    val twoHours = "set timer to two hours"
 
 
 Files
 -----
 
 The jar file built by this project needs to be copied to the Sarah plugins directory.
-On my computer that directory is _/Users/al/Sarah/plugins/DDGoogleSearch_.
+On my computer that directory is _/Users/al/Sarah/plugins/DDTimer_.
 
 Files in that directory should be:
 
-    GoogleSearch.info
-    GoogleSearch.jar
-    README.txt
+    Timer.info
+    Timer.jar
 
-The _GoogleSearch.info_ file currently contains these contents:
+The _Timer.info_ file currently contains these contents:
 
-    main_class = com.devdaily.sarah.plugin.googlesearch.GoogleSearchPlugin
-    plugin_name = Google Search
-
-
-To-Do
------
-
-* Let the user configure their desired browser
+    main_class = com.devdaily.sarah.plugin.timer.TimerPlugin
+    plugin_name = Timer
 
 
 Developers - Building this Plugin
@@ -45,13 +46,13 @@ You can build this plugin using the shell script named _build-jar.sh. It current
         exit 1
     fi
 
-    cp target/scala-2.10/googlesearch_2.10-0.1.jar GoogleSearch.jar
+    cp target/scala-2.10/timer_2.10-0.1.jar Timer.jar
 
-    ls -l GoogleSearch.jar
+    ls -l Timer.jar
 
     echo ""
-    echo "Created GoogleSearch.jar. Copy that file to /Users/al/Sarah/plugins/DDGoogleSearch, like this:"
-    echo "cp GoogleSearch.jar /Users/al/Sarah/plugins/DDGoogleSearch"
+    echo "Created Timer.jar. Copy that file to /Users/al/Sarah/plugins/DDTimer, like this:"
+    echo "cp Timer.jar /Users/al/Sarah/plugins/DDTimer"
 
 
 Dependencies
@@ -62,6 +63,7 @@ This plugin depends on:
 * The Sarah2.jar file.
 * The Akka/Scala actors. The actor version needs to be kept in sync with whatever actor version
   Sarah2 uses.
+* ScalaTest
 
 As mentioned above, I need to improve the process of requiring and using the Sarah2.jar file,
 but that's more of a problem for the Sarah2 project than for this project. 
